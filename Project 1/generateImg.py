@@ -14,6 +14,31 @@ from PIL import Image,ImageTk
 
 random.seed(a=None)
 
+def loss(x,y):
+	return y/(x+1)*tan((x)*(y)*pi/180)
+def diamond(x,y):
+	return (cos(x*pi/180)+sin(y*pi/180))*255%sys.maxsize
+def wave(x,y):
+	return (cos(x*pi/180)+tan(y*pi/180))*255%sys.maxsize
+def grid(x,y):
+	return (tan(x*pi/180)+tan(y*pi/180))%sys.maxsize
+def gradient1(x,y,imgSize):
+	return (x/imgSize[0]+y/imgSize[1])/2*255%sys.maxsize
+def gradient2(x,y,imgSize):
+	return (x/imgSize[0]-y/imgSize[1])*255%sys.maxsize
+def diagGrad1(x,y,imgSize):
+	return cos((x/imgSize[0]-y/imgSize[1])/2*pi)*255
+def diagGrad2(x,y,imgSize):
+	return sin((x/imgSize[0]+y/imgSize[1])/2*pi)*255
+def eye(x,y):
+	return (sin(y*pi/180)-cos(x*pi/180)*2)*255
+def circ(x,y,imgSize):
+	return 255 if int(pow((2*x-imgSize[0])/9,2)+pow((2*y-imgSize[1])/9,2))<127 else 0
+def invCirc(x,y,imgSize):
+	return int((pow((2*x-imgSize[0])/9,2)+pow((2*y-imgSize[1])/9,2))/127)*255
+def ripple(x,y,imgSize):
+	return int(pow((2*x-imgSize[0])/10,2)+pow((2*y-imgSize[1])/10,2))
+
 def fibonacciTest(image):
 	"""Use fibonacci sequence to generate image"""
 	pixel=image.load()
@@ -105,30 +130,15 @@ class Gui(tk.Frame):
 		for x in range(0,self.img.size[0]):
 			for y in range(0,self.img.size[1]):
 				#Begin generation
-				
-				#loss=y/(x+1)*tan((x)*(y)*pi/180)
-				#diamond=(cos(x*pi/180)+sin(y*pi/180))*255%sys.maxsize
-				#wave=(cos(x*pi/180)+tan(y*pi/180))*255%sys.maxsize
-				grid=(tan(x*pi/180)+tan(y*pi/180))%sys.maxsize
-				#gradient1=(x/imgSize[0]+y/imgSize[1])/2*255%sys.maxsize
-				#gradient2=(x/imgSize[0]-y/imgSize[1])*255%sys.maxsize
-				#diagGrad1=cos((x/imgSize[0]-y/imgSize[1])/2*pi)*255
-				#diagGrad2=sin((x/imgSize[0]+y/imgSize[1])/2*pi)*255
-				#eye=(sin(y*pi/180)-cos(x*pi/180)*2)*255
-				circ=255 if int(pow((2*x-imgSize[0])/9,2)+pow((2*y-imgSize[1])/9,2))<127 else 0
-				invCirc=int((pow((2*x-imgSize[0])/9,2)+pow((2*y-imgSize[1])/9,2))/127)*255
-				ripple=int(pow((2*x-imgSize[0])/10,2)+pow((2*y-imgSize[1])/10,2))
-				
-				R=grid
-				G=grid
-				B=ripple
+				R=0
+				G=ripple(x,y,imgSize)-diagGrad2(x,y,imgSize)
+				B=0
 				pixel[x,y]=(
 					int(R*p+random.randint(0,255)*(1-p))%256,
 					int(G*p+random.randint(0,255)*(1-p))%256,
 					int(B*p+random.randint(0,255)*(1-p))%256
 				)
 				#End generation
-		#self.img=fibonacciTest(self.img)
 		return
 	
 	def randomImg(self):
