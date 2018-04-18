@@ -29,24 +29,6 @@ def openFile(pnt):
 		]
 	)
 
-class Rand():
-	""""""
-	def __init__(self):
-		""""""
-		super(Rand, self).__init__()
-		self.num=int(time.time()*1000)
-		
-	def generate(self,seed=0,shift=5):
-		""""""
-		if(seed):
-			self.num=seed
-		else:
-			bitMax=size(self.num)*8-1
-			self.num^=(self.num<<(shift%bitMax+1))|(self.num>>(bitMax-shift%bitMax))
-			self.num+=0x9595
-			self.num%=pow(2,8*12)
-		return self.num
-
 class Gui(tk.Frame):
 	"""Main window for program"""
 	def __init__(self,master=None):
