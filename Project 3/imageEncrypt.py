@@ -2,10 +2,9 @@
 """
 	Ian Mallarino
 	Intro to Image and Video Processing
-	Embeds a watermark in to an image
+	Implements two-way encryption algroithm on image
 """
 
-from sys import getsizeof as size
 import numpy
 import rng
 import time
