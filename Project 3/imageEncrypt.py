@@ -2,9 +2,10 @@
 """
 	Ian Mallarino
 	Intro to Image and Video Processing
-	Implements two-way encryption algroithm on image
+	Embeds a watermark in to an image
 """
 
+from sys import getsizeof as size
 import numpy
 import rng
 import time
@@ -28,6 +29,24 @@ def openFile(pnt):
 		]
 	)
 
+class Rand():
+	""""""
+	def __init__(self):
+		""""""
+		super(Rand, self).__init__()
+		self.num=int(time.time()*1000)
+		
+	def generate(self,seed=0,shift=5):
+		""""""
+		if(seed):
+			self.num=seed
+		else:
+			bitMax=size(self.num)*8-1
+			self.num^=(self.num<<(shift%bitMax+1))|(self.num>>(bitMax-shift%bitMax))
+			self.num+=0x9595
+			self.num%=pow(2,8*12)
+		return self.num
+
 class Gui(tk.Frame):
 	"""Main window for program"""
 	def __init__(self,master=None):
@@ -48,10 +67,15 @@ class Gui(tk.Frame):
 		#image preview
 		self.pre=tk.Frame(self)
 		self.pre.pack(side="bottom")
+		#key entry area
+		self.keyArea=tk.Label(self)
+		self.keyArea.pack(side="bottom")
 		#key input bar
-		self.keyIn=tk.Entry(self)
+		self.entryName=tk.Label(self.keyArea,text="Key: ")
+		self.entryName.pack(side="left")
+		self.keyIn=tk.Entry(self.keyArea)
 		self.keyIn.insert(0,self.key)
-		self.keyIn.pack(side="bottom")
+		self.keyIn.pack(side="left")
 		#left image
 		self.lPre=tk.Label(self.pre)
 		self.lPre.pack(side="left")
